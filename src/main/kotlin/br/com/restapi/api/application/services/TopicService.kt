@@ -1,6 +1,7 @@
 package br.com.restapi.api.application.services
 
 import br.com.restapi.api.domain.dto.ListTopicsResponseDTO
+import br.com.restapi.api.domain.dto.TopicResponseDTO
 import br.com.restapi.api.domain.models.Course
 import br.com.restapi.api.domain.models.Topic
 import br.com.restapi.api.domain.models.User
@@ -22,7 +23,12 @@ class TopicService(
         topics.addAll(listOf(topic1, topic2, topic3))
     }
 
-    fun listTopics(): List<ListTopicsResponseDTO>{
+    fun listTopics(): List<ListTopicsResponseDTO> {
         return listOf(ListTopicsResponseDTO(topics))
+    }
+
+    fun searchTopic(id: Long): TopicResponseDTO {
+        val topic = topics.stream().filter { t -> t.id == id }.findFirst().get()
+        return TopicResponseDTO(topic)
     }
 }
