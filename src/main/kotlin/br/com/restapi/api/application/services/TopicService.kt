@@ -2,6 +2,7 @@ package br.com.restapi.api.application.services
 
 import br.com.restapi.api.domain.dto.ListTopicsResponseDTO
 import br.com.restapi.api.domain.dto.TopicResponseDTO
+import br.com.restapi.api.domain.models.Answer
 import br.com.restapi.api.domain.models.Course
 import br.com.restapi.api.domain.models.Topic
 import br.com.restapi.api.domain.models.User

@@ -11,5 +11,5 @@ data class Topic(
     val course: Course,
     val author: User,
     val status: StatusTopic = StatusTopic.NOT_ANSWERED,
-    val answers: List<Answer> = ArrayList()
+    val answers: MutableList<Answer> = mutableListOf()
 )
