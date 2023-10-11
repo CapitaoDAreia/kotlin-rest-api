@@ -7,9 +7,9 @@ data class Topic(
     val id: Long? = null,
     val title: String,
     val message: String,
-    val creationDate: LocalDateTime = LocalDateTime.now(),
     val course: Course,
     val author: User,
+    val creationDate: LocalDateTime = LocalDateTime.now(),
     val status: StatusTopic = StatusTopic.NOT_ANSWERED,
-    val answers: MutableList<Answer> = mutableListOf()
+    val answers: MutableList<Answer> = ArrayList()
 )

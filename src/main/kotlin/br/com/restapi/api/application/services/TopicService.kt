@@ -1,8 +1,8 @@
 package br.com.restapi.api.application.services
 
-import br.com.restapi.api.domain.dto.ListTopicsResponseDTO
-import br.com.restapi.api.domain.dto.TopicResponseDTO
-import br.com.restapi.api.domain.models.Answer
+import br.com.restapi.api.domain.dto.topicDTO.ListTopicsResponseDTO
+import br.com.restapi.api.domain.dto.topicDTO.NewTopicDTO
+import br.com.restapi.api.domain.dto.topicDTO.TopicResponseDTO
 import br.com.restapi.api.domain.models.Course
 import br.com.restapi.api.domain.models.Topic
 import br.com.restapi.api.domain.models.User
@@ -11,25 +11,42 @@ import java.time.LocalDateTime
 
 @Service
 class TopicService(
-    private var topics: MutableList<Topic>
+    private var topicsStub: MutableList<Topic> = ArrayList(),
+    private var userService: UserService,
+    private var courseService: CourseService
+
 ) {
     init {
-        val user = User(1, "user", "user@email.com")
-        val course = Course(1, "name", "category")
-
-        val topic1 = Topic(1, "title", "message", LocalDateTime.now(), course, user)
-        val topic2 = Topic(2, "title", "message", LocalDateTime.now(), course, user)
-        val topic3 = Topic(3, "title", "message", LocalDateTime.now(), course, user)
-
-        topics.addAll(listOf(topic1, topic2, topic3))
+        topicsStub.add(
+            Topic(
+                1, "title", "message",
+                Course(1, "course", "category"),
+                User(1, "name", "email")
+            )
+        )
     }
 
-    fun listTopics(): List<ListTopicsResponseDTO> {
-        return listOf(ListTopicsResponseDTO(topics))
+    fun listTopics(): List<Topic> {
+        return topicsStub
     }
 
-    fun searchTopic(id: Long): TopicResponseDTO {
-        val topic = topics.stream().filter { t -> t.id == id }.findFirst().get()
-        return TopicResponseDTO(topic)
+    fun searchTopic(id: Long): Topic {
+        val topic = topicsStub.stream().filter { t -> t.id == id }.findFirst().get()
+        return topic
+    }
+
+    fun registerTopic(dto: NewTopicDTO) {
+        val course = courseService.searchCourse(dto.courseId)
+        val user = userService.searchUser(dto.authorId)
+
+        val topic = Topic(
+            id = topicsStub.size.toLong(),
+            dto.title,
+            dto.message,
+            course,
+            user,
+        )
+
+        topicsStub.plus(topic)
     }
 }
