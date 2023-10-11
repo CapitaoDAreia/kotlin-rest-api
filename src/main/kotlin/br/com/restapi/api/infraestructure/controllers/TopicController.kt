@@ -21,17 +21,15 @@ class TopicController(
     private val topicService: TopicService
 ) {
     @GetMapping
-    fun listTopics(): ResponseEntity<ListTopicsResponseDTO>{
+    fun listTopics(): ResponseEntity<List<TopicResponseDTO>> {
         val result = topicService.listTopics()
-        val dto = ListTopicsResponseDTO(result)
-        return ResponseEntity.ok(dto)
+        return ResponseEntity.ok(result)
     }
 
     @GetMapping("/{topicId}")
     fun searchTopic(@PathVariable topicId: Long): ResponseEntity<TopicResponseDTO>{
         val result = topicService.searchTopic(topicId)
-        val dto = TopicResponseDTO(result)
-        return ResponseEntity.ok(dto)
+        return ResponseEntity.ok(result)
     }
 
     @GetMapping("/answers/{topicId}")

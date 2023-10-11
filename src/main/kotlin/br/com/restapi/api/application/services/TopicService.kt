@@ -1,5 +1,7 @@
 package br.com.restapi.api.application.services
 
+import br.com.restapi.api.application.services.mapper.topic.NewTopicDtoToTopic
+import br.com.restapi.api.application.services.mapper.topic.TopicToTopicResponseDtoMapper
 import br.com.restapi.api.domain.dto.topicDTO.ListTopicsResponseDTO
 import br.com.restapi.api.domain.dto.topicDTO.NewTopicDTO
 import br.com.restapi.api.domain.dto.topicDTO.TopicResponseDTO
@@ -12,9 +14,8 @@ import java.time.LocalDateTime
 @Service
 class TopicService(
     private var topicsStub: MutableList<Topic> = ArrayList(),
-    private var userService: UserService,
-    private var courseService: CourseService
-
+    private var topicToTopicResponseDtoMapper: TopicToTopicResponseDtoMapper,
+    private var newTopicDtoToTopic: NewTopicDtoToTopic
 ) {
     init {
         topicsStub.add(
@@ -26,27 +27,18 @@ class TopicService(
         )
     }
 
-    fun listTopics(): List<Topic> {
-        return topicsStub
+    fun listTopics(): List<TopicResponseDTO> {
+        return topicsStub.map { t -> topicToTopicResponseDtoMapper.map(t) }
     }
 
-    fun searchTopic(id: Long): Topic {
+    fun searchTopic(id: Long): TopicResponseDTO {
         val topic = topicsStub.stream().filter { t -> t.id == id }.findFirst().get()
-        return topic
+        return topicToTopicResponseDtoMapper.map(topic)
     }
 
     fun registerTopic(dto: NewTopicDTO) {
-        val course = courseService.searchCourse(dto.courseId)
-        val user = userService.searchUser(dto.authorId)
-
-        val topic = Topic(
-            id = topicsStub.size.toLong(),
-            dto.title,
-            dto.message,
-            course,
-            user,
-        )
-
+        val topic = newTopicDtoToTopic.map(dto)
+        topic.id = topicsStub.size.toLong()
         topicsStub.plus(topic)
     }
 }

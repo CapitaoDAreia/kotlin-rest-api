@@ -11,20 +11,9 @@ data class TopicResponseDTO(
     val id: Long? = null,
     val title: String,
     val message: String,
-    val creationDate: LocalDateTime = LocalDateTime.now(),
     val course: Course,
     val author: User,
+    val creationDate: LocalDateTime = LocalDateTime.now(),
     val status: StatusTopic = StatusTopic.NOT_ANSWERED,
     val answers: List<Answer> = ArrayList()
-) {
-    constructor(topic: Topic) : this(
-        topic.id,
-        topic.title,
-        topic.message,
-        topic.creationDate,
-        topic.course,
-        topic.author,
-        topic.status,
-        topic.answers
-    )
-}
+)
