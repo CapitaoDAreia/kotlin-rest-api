@@ -1,10 +1,10 @@
 package br.com.restapi.api.application.services
 
-import br.com.restapi.api.application.services.mapper.answer.NewAnswersDtoToAnswer
 import br.com.restapi.api.application.services.mapper.topic.NewTopicDtoToTopic
 import br.com.restapi.api.application.services.mapper.topic.TopicToTopicResponseDtoMapper
 import br.com.restapi.api.domain.dto.topicDTO.NewTopicDTO
 import br.com.restapi.api.domain.dto.topicDTO.TopicResponseDTO
+import br.com.restapi.api.domain.dto.topicDTO.UpdateTopicDTO
 import br.com.restapi.api.domain.models.Course
 import br.com.restapi.api.domain.models.Topic
 import br.com.restapi.api.domain.models.User
@@ -39,5 +39,22 @@ class TopicService(
         val topic = newTopicDtoToTopic.map(dto)
         topic.id = topicsStub.size.toLong()
         topicsStub.plus(topic)
+    }
+
+    fun updateTopic(dto: UpdateTopicDTO) {
+        val topic = topicsStub.stream().filter {t ->
+            t.id == dto.id
+        }.findFirst().get()
+
+        topicsStub = topicsStub.minus(topic).plus(Topic(
+            dto.id,
+            dto.title,
+            dto.message,
+            topic.course,
+            topic.author,
+            topic.creationDate,
+            topic.status,
+            topic.answers
+        )).toMutableList()
     }
 }
