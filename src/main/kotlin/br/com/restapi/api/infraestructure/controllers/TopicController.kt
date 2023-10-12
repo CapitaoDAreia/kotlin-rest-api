@@ -2,10 +2,8 @@ package br.com.restapi.api.infraestructure.controllers
 
 import br.com.restapi.api.application.services.TopicService
 import br.com.restapi.api.domain.dto.topicDTO.ListAnswersOfATopicResponseDTO
-import br.com.restapi.api.domain.dto.topicDTO.ListTopicsResponseDTO
 import br.com.restapi.api.domain.dto.topicDTO.NewTopicDTO
 import br.com.restapi.api.domain.dto.topicDTO.TopicResponseDTO
-import br.com.restapi.api.domain.models.Topic
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping

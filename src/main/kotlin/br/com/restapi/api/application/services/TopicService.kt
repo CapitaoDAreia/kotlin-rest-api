@@ -2,14 +2,12 @@ package br.com.restapi.api.application.services
 
 import br.com.restapi.api.application.services.mapper.topic.NewTopicDtoToTopic
 import br.com.restapi.api.application.services.mapper.topic.TopicToTopicResponseDtoMapper
-import br.com.restapi.api.domain.dto.topicDTO.ListTopicsResponseDTO
 import br.com.restapi.api.domain.dto.topicDTO.NewTopicDTO
 import br.com.restapi.api.domain.dto.topicDTO.TopicResponseDTO
 import br.com.restapi.api.domain.models.Course
 import br.com.restapi.api.domain.models.Topic
 import br.com.restapi.api.domain.models.User
 import org.springframework.stereotype.Service
-import java.time.LocalDateTime
 
 @Service
 class TopicService(
