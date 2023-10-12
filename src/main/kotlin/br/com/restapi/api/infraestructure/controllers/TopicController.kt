@@ -1,9 +1,9 @@
 package br.com.restapi.api.infraestructure.controllers
 
 import br.com.restapi.api.application.services.TopicService
-import br.com.restapi.api.domain.dto.topicDTO.ListAnswersOfATopicResponseDTO
 import br.com.restapi.api.domain.dto.topicDTO.NewTopicDTO
 import br.com.restapi.api.domain.dto.topicDTO.TopicResponseDTO
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -30,16 +30,8 @@ class TopicController(
         return ResponseEntity.ok(result)
     }
 
-    @GetMapping("/answers/{topicId}")
-    fun searchTopicResponses(@PathVariable topicId: Long): ResponseEntity<ListAnswersOfATopicResponseDTO>{
-        val topic = topicService.searchTopic(topicId)
-        val answers = topic.answers
-        val dto = ListAnswersOfATopicResponseDTO(answers)
-        return ResponseEntity.ok(dto)
-    }
-
     @PostMapping
-    fun postTopic(@RequestBody dto: NewTopicDTO): ResponseEntity<Any>{
+    fun postTopic(@RequestBody @Valid dto: NewTopicDTO): ResponseEntity<Any>{
         topicService.registerTopic(dto)
         return ResponseEntity.status(HttpStatus.CREATED).build()
     }

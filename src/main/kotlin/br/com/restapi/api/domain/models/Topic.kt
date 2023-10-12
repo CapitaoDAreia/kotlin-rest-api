@@ -11,5 +11,5 @@ data class Topic(
     val author: User,
     val creationDate: LocalDateTime = LocalDateTime.now(),
     val status: StatusTopic = StatusTopic.NOT_ANSWERED,
-    val answers: MutableList<Answer> = ArrayList()
+    var answers: MutableList<Answer> = ArrayList()
 )

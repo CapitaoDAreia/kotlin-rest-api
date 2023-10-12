@@ -8,12 +8,12 @@ import br.com.restapi.api.domain.models.User
 import java.time.LocalDateTime
 
 data class TopicResponseDTO(
-    val id: Long? = null,
+    val id: Long?,
     val title: String,
     val message: String,
     val course: Course,
     val author: User,
     val creationDate: LocalDateTime = LocalDateTime.now(),
     val status: StatusTopic = StatusTopic.NOT_ANSWERED,
-    val answers: List<Answer> = ArrayList()
+    val answers: MutableList<Answer> = ArrayList()
 )
