@@ -4,9 +4,7 @@ import br.com.restapi.api.application.services.CourseService
 import br.com.restapi.api.application.services.UserService
 import br.com.restapi.api.application.services.mapper.Mapper
 import br.com.restapi.api.application.services.mapper.course.CourseResponseDtoToCourseMapper
-import br.com.restapi.api.application.services.mapper.course.CourseToCourseResponseDtoMapper
 import br.com.restapi.api.application.services.mapper.user.UserResponseDtoToUserMapper
-import br.com.restapi.api.application.services.mapper.user.UserToUserResponseDtoMapper
 import br.com.restapi.api.domain.dto.topicDTO.NewTopicDTO
 import br.com.restapi.api.domain.models.Topic
 import org.springframework.stereotype.Component
