@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.util.UriComponentsBuilder
 
 @RestController
 @RequestMapping("/answers")
@@ -20,9 +21,10 @@ class AnswerController(
     private val topicService: TopicService
 ) {
     @PostMapping("/register/{topicId}")
-    fun registerAnswerOnATopic(@RequestBody dto: NewAnswersDTO, @PathVariable topicId: Long): ResponseEntity<Any>{
-        answerService.registerAnswerOnATopic(dto, topicId)
-        return ResponseEntity.status(HttpStatus.CREATED).build()
+    fun registerAnswerOnATopic(@RequestBody dto: NewAnswersDTO, @PathVariable topicId: Long, uriBuilber: UriComponentsBuilder): ResponseEntity<Any>{
+        val answer = answerService.registerAnswerOnATopic(dto, topicId)
+        val uri = uriBuilber.path("/topic/${answer.id}").build().toUri()
+        return ResponseEntity.created(uri).body(answer)
     }
 
     @GetMapping("/{topicId}")

@@ -35,18 +35,19 @@ class TopicService(
         return topicToTopicResponseDtoMapper.map(topic)
     }
 
-    fun registerTopic(dto: NewTopicDTO) {
+    fun registerTopic(dto: NewTopicDTO): TopicResponseDTO {
         val topic = newTopicDtoToTopic.map(dto)
         topic.id = topicsStub.size.toLong()
         topicsStub.plus(topic)
+        return topicToTopicResponseDtoMapper.map(topic)
     }
 
-    fun updateTopic(dto: UpdateTopicDTO) {
+    fun updateTopic(dto: UpdateTopicDTO): TopicResponseDTO {
         val topic = topicsStub.stream().filter {t ->
             t.id == dto.id
         }.findFirst().get()
 
-        topicsStub = topicsStub.minus(topic).plus(Topic(
+        val newTopic = Topic(
             dto.id,
             dto.title,
             dto.message,
@@ -55,7 +56,11 @@ class TopicService(
             topic.creationDate,
             topic.status,
             topic.answers
-        )).toMutableList()
+        )
+
+        topicsStub = topicsStub.minus(topic).plus(newTopic).toMutableList()
+
+        return topicToTopicResponseDtoMapper.map(newTopic)
     }
 
     fun deleteTopic(topicId: Long) {

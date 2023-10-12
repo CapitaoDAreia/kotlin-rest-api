@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.util.UriComponentsBuilder
 
 @RestController
 @RequestMapping("/topic")
@@ -34,21 +35,21 @@ class TopicController(
     }
 
     @PostMapping
-    fun postTopic(@RequestBody @Valid dto: NewTopicDTO): ResponseEntity<Any> {
-        topicService.registerTopic(dto)
-        return ResponseEntity.status(HttpStatus.CREATED).build()
+    fun postTopic(@RequestBody @Valid dto: NewTopicDTO, uriBuilber: UriComponentsBuilder): ResponseEntity<Any> {
+        val topic = topicService.registerTopic(dto)
+        val uri = uriBuilber.path("/topic/${topic.id}").build().toUri()
+        return ResponseEntity.created(uri).body(topic)
     }
 
     @PutMapping
     fun updateTopic(@RequestBody @Valid dto: UpdateTopicDTO): ResponseEntity<Any> {
-        topicService.updateTopic(dto)
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build()
-
+        val newTopic = topicService.updateTopic(dto)
+        return ResponseEntity.ok(newTopic)
     }
 
     @DeleteMapping("/{topicId}")
     fun deleteTopic(@PathVariable topicId: Long): ResponseEntity<Any> {
         topicService.deleteTopic(topicId)
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build()
+        return ResponseEntity.noContent().build()
     }
 }
