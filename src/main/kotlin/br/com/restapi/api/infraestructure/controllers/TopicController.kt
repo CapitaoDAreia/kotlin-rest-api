@@ -7,6 +7,7 @@ import br.com.restapi.api.domain.dto.topicDTO.UpdateTopicDTO
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -27,21 +28,27 @@ class TopicController(
     }
 
     @GetMapping("/{topicId}")
-    fun searchTopic(@PathVariable topicId: Long): ResponseEntity<TopicResponseDTO>{
+    fun searchTopic(@PathVariable topicId: Long): ResponseEntity<TopicResponseDTO> {
         val result = topicService.searchTopic(topicId)
         return ResponseEntity.ok(result)
     }
 
     @PostMapping
-    fun postTopic(@RequestBody @Valid dto: NewTopicDTO): ResponseEntity<Any>{
+    fun postTopic(@RequestBody @Valid dto: NewTopicDTO): ResponseEntity<Any> {
         topicService.registerTopic(dto)
         return ResponseEntity.status(HttpStatus.CREATED).build()
     }
 
     @PutMapping
-    fun updateTopic(@RequestBody @Valid dto: UpdateTopicDTO): ResponseEntity<Any>{
+    fun updateTopic(@RequestBody @Valid dto: UpdateTopicDTO): ResponseEntity<Any> {
         topicService.updateTopic(dto)
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build()
 
+    }
+
+    @DeleteMapping("/{topicId}")
+    fun deleteTopic(@PathVariable topicId: Long): ResponseEntity<Any> {
+        topicService.deleteTopic(topicId)
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build()
     }
 }

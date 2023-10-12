@@ -57,4 +57,12 @@ class TopicService(
             topic.answers
         )).toMutableList()
     }
+
+    fun deleteTopic(topicId: Long) {
+        val topic = topicsStub.stream().filter {t ->
+            t.id == topicId
+        }.findFirst().get()
+
+        topicsStub = topicsStub.minus(topic).toMutableList()
+    }
 }
