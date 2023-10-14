@@ -2,9 +2,11 @@ package br.com.restapi.api.application.services
 
 import br.com.restapi.api.application.services.mapper.topic.NewTopicDtoToTopic
 import br.com.restapi.api.application.services.mapper.topic.TopicToTopicResponseDtoMapper
+import br.com.restapi.api.domain.dto.answersDTO.UpdateAnswerDTO
 import br.com.restapi.api.domain.dto.topicDTO.NewTopicDTO
 import br.com.restapi.api.domain.dto.topicDTO.TopicResponseDTO
 import br.com.restapi.api.domain.dto.topicDTO.UpdateTopicDTO
+import br.com.restapi.api.domain.models.Answer
 import br.com.restapi.api.domain.models.Course
 import br.com.restapi.api.domain.models.Topic
 import br.com.restapi.api.domain.models.User
@@ -31,7 +33,7 @@ class TopicService(
     }
 
     fun searchTopic(id: Long): TopicResponseDTO {
-        val topic = topicsStub.stream().filter { t -> t.id == id }.findFirst().get()
+        val topic = findTopic(id)
         return topicToTopicResponseDtoMapper.map(topic)
     }
 
@@ -43,9 +45,7 @@ class TopicService(
     }
 
     fun updateTopic(dto: UpdateTopicDTO): TopicResponseDTO {
-        val topic = topicsStub.stream().filter {t ->
-            t.id == dto.id
-        }.findFirst().get()
+        val topic = findTopic(dto.id)
 
         val newTopic = Topic(
             dto.id,
@@ -64,10 +64,31 @@ class TopicService(
     }
 
     fun deleteTopic(topicId: Long) {
-        val topic = topicsStub.stream().filter {t ->
-            t.id == topicId
-        }.findFirst().get()
+        val topic = findTopic(topicId)
 
         topicsStub = topicsStub.minus(topic).toMutableList()
+    }
+
+    fun updateAnswerOfTopic(dto: UpdateAnswerDTO): Answer? {
+        val targetTopic = findTopic(dto.topicId)
+
+        val targetAnswer = targetTopic.answers.find { it.id == dto.id }
+
+        if (targetAnswer != null) {
+            targetAnswer.message = dto.message
+        }
+
+        return targetAnswer
+    }
+
+    fun deleteAnswerOfTopic(topicId: Long, answerId: Long) {
+        val targetTopic = topicsStub.find { it.id == topicId }
+        targetTopic?.answers?.removeIf { it.id == answerId }
+    }
+
+    private fun findTopic(id: Long): Topic{
+        return topicsStub.stream().filter {t ->
+            t.id == id
+        }.findFirst().get()
     }
 }

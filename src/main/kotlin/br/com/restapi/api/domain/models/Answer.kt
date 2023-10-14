@@ -4,7 +4,7 @@ import java.time.LocalDateTime
 
 data class Answer(
     val id: Long? = null,
-    val message: String,
+    var message: String,
     val author: User,
     val topic: Topic,
     val solution: Boolean,

@@ -3,15 +3,11 @@ package br.com.restapi.api.infraestructure.controllers
 import br.com.restapi.api.application.services.AnswerService
 import br.com.restapi.api.application.services.TopicService
 import br.com.restapi.api.domain.dto.answersDTO.NewAnswersDTO
+import br.com.restapi.api.domain.dto.answersDTO.UpdateAnswerDTO
 import br.com.restapi.api.domain.dto.topicDTO.ListAnswersOfATopicResponseDTO
-import org.springframework.http.HttpStatus
+import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import org.springframework.web.util.UriComponentsBuilder
 
 @RestController
@@ -33,5 +29,17 @@ class AnswerController(
         val answers = topic.answers
         val dto = ListAnswersOfATopicResponseDTO(answers)
         return ResponseEntity.ok(dto)
+    }
+
+    @PutMapping
+    fun updateAnswer(@RequestBody @Valid dto: UpdateAnswerDTO): ResponseEntity<Any> {
+        val newTopic = topicService.updateAnswerOfTopic(dto)
+        return ResponseEntity.ok(newTopic)
+    }
+
+    @DeleteMapping("/{topicId}")
+    fun deleteAnswer(@PathVariable topicId: Long, @PathVariable answerId: Long): ResponseEntity<Any> {
+        topicService.deleteAnswerOfTopic(topicId, answerId)
+        return ResponseEntity.noContent().build()
     }
 }

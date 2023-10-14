@@ -4,7 +4,7 @@ import jakarta.validation.constraints.*
 
 data class UpdateTopicDTO(
     @field:NotNull
-    val id: Long?,
+    val id: Long,
 
     @field:NotBlank
     @field:Size(min = 5, max = 30)
