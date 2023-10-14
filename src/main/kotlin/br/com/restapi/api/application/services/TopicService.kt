@@ -1,5 +1,6 @@
 package br.com.restapi.api.application.services
 
+import br.com.restapi.api.application.exceptions.NotFoundException
 import br.com.restapi.api.application.services.mapper.topic.NewTopicDtoToTopic
 import br.com.restapi.api.application.services.mapper.topic.TopicToTopicResponseDtoMapper
 import br.com.restapi.api.domain.dto.answersDTO.UpdateAnswerDTO
@@ -72,23 +73,21 @@ class TopicService(
     fun updateAnswerOfTopic(dto: UpdateAnswerDTO): Answer? {
         val targetTopic = findTopic(dto.topicId)
 
-        val targetAnswer = targetTopic.answers.find { it.id == dto.id }
+        val targetAnswer = targetTopic.answers.find { it.id == dto.id } ?: throw NotFoundException("Answer Not Found For This ID ${dto.id}")
 
-        if (targetAnswer != null) {
-            targetAnswer.message = dto.message
-        }
+        targetAnswer.message = dto.message
 
         return targetAnswer
     }
 
     fun deleteAnswerOfTopic(topicId: Long, answerId: Long) {
-        val targetTopic = topicsStub.find { it.id == topicId }
-        targetTopic?.answers?.removeIf { it.id == answerId }
+        val targetTopic = topicsStub.find { it.id == topicId } ?: throw NotFoundException("Topic Not Found For This ID ${topicId}")
+        targetTopic.answers.removeIf { it.id == answerId }
     }
 
     private fun findTopic(id: Long): Topic{
         return topicsStub.stream().filter {t ->
             t.id == id
-        }.findFirst().get()
+        }.findFirst().orElseThrow{NotFoundException("Topic Not Found")}
     }
 }
